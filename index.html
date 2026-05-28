@@ -1,35 +1,202 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Sosu</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sosu — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <style>
-    body{
+    *{
       margin:0;
-      background:#0d0d0d;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    body{
+      font-family:'Inter',sans-serif;
+      background:#0b0b0b;
       color:white;
-      font-family:Arial, sans-serif;
-      display:flex;
-      justify-content:center;
-      align-items:center;
+      overflow-x:hidden;
+    }
+
+    header{
       height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:20px;
+      background:
+      linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.7)),
+      url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1600&auto=format&fit=crop') center/cover;
+    }
+
+    .hero h1{
+      font-size:5rem;
+      letter-spacing:4px;
+      font-weight:700;
+    }
+
+    .hero p{
+      margin-top:15px;
+      font-size:1.1rem;
+      color:#cfcfcf;
+      font-weight:300;
+    }
+
+    .about{
+      max-width:900px;
+      margin:auto;
+      padding:100px 25px;
       text-align:center;
     }
 
-    h1{
-      font-size:4rem;
-      margin:0;
+    .about h2,
+    .gallery-title,
+    .contact h2{
+      font-size:2.5rem;
+      margin-bottom:20px;
     }
 
-    p{
-      opacity:.7;
+    .about p{
+      line-height:1.8;
+      color:#b5b5b5;
+      font-size:1.05rem;
+    }
+
+    .gallery{
+      padding:0 25px 100px;
+      max-width:1400px;
+      margin:auto;
+    }
+
+    .gallery-title{
+      text-align:center;
+      margin-bottom:50px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:20px;
+    }
+
+    .grid img{
+      width:100%;
+      height:420px;
+      object-fit:cover;
+      border-radius:18px;
+      transition:.4s ease;
+      filter:grayscale(15%);
+    }
+
+    .grid img:hover{
+      transform:scale(1.02);
+      filter:none;
+    }
+
+    .contact{
+      padding:100px 25px;
+      text-align:center;
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+
+    .contact p{
+      color:#b8b8b8;
+      margin-bottom:20px;
+    }
+
+    .socials{
+      display:flex;
+      justify-content:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    .socials a{
+      text-decoration:none;
+      color:white;
+      padding:12px 22px;
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:999px;
+      transition:.3s;
+    }
+
+    .socials a:hover{
+      background:white;
+      color:black;
+    }
+
+    footer{
+      padding:30px;
+      text-align:center;
+      color:#777;
+      font-size:.9rem;
+    }
+
+    @media(max-width:768px){
+      .hero h1{
+        font-size:3rem;
+      }
+
+      .grid img{
+        height:320px;
+      }
     }
   </style>
 </head>
 <body>
-  <div>
-    <h1>Sosu</h1>
-    <p>Ingeniería, ideas y perspectivas.</p>
-  </div>
+
+  <header>
+    <div class="hero">
+      <h1>SOSU</h1>
+      <p>Fotografía • Perspectivas • Detalles</p>
+    </div>
+  </header>
+
+  <section class="about">
+    <h2>Sobre mí</h2>
+    <p>
+      Me interesa capturar momentos, atmósferas y pequeños detalles que normalmente pasan desapercibidos.
+      Mi enfoque mezcla estética, emoción y una forma más introspectiva de observar el entorno.
+    </p>
+  </section>
+
+  <section class="gallery">
+    <h2 class="gallery-title">Galería</h2>
+
+    <div class="grid">
+      <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1200&auto=format&fit=crop">
+
+      <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop">
+
+      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop">
+
+      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop">
+
+      <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=1200&auto=format&fit=crop">
+
+      <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1200&auto=format&fit=crop">
+    </div>
+  </section>
+
+  <section class="contact">
+    <h2>Contacto</h2>
+    <p>Puedes encontrarme o seguir mi trabajo aquí.</p>
+
+    <div class="socials">
+      <a href="#">Instagram</a>
+      <a href="#">Behance</a>
+      <a href="#">GitHub</a>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Sosu — Portfolio fotográfico.
+  </footer>
+
 </body>
 </html>
