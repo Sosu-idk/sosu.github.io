@@ -3,200 +3,779 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sosu — Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <title>Benjamin Piratova — Portafolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
 
   <style>
-    *{
-      margin:0;
-      padding:0;
-      box-sizing:border-box;
+    :root {
+      --ink: #111008;
+      --paper: #f4f0e8;
+      --gold: #b8922a;
+      --rust: #8b3a1e;
+      --sage: #4a5c3a;
+      --mist: #c8cfc4;
+      --off: #e8e4db;
     }
 
-    body{
-      font-family:'Inter',sans-serif;
-      background:#0b0b0b;
-      color:white;
-      overflow-x:hidden;
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+      cursor: none;
     }
 
-    header{
-      height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding:20px;
-      background:
-      linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.7)),
-      url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1600&auto=format&fit=crop') center/cover;
+    /* ── CURSOR ── */
+    .cursor {
+      width: 10px; height: 10px;
+      background: var(--ink);
+      border-radius: 50%;
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s, background 0.2s, width 0.25s, height 0.25s;
+      mix-blend-mode: multiply;
+    }
+    .cursor.hover { width: 40px; height: 40px; background: var(--gold); }
+
+    /* ── GRAIN OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.4;
     }
 
-    .hero h1{
-      font-size:5rem;
-      letter-spacing:4px;
-      font-weight:700;
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 500;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.8rem 4rem;
+      mix-blend-mode: multiply;
+    }
+    .nav-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--ink);
+      opacity: 0.55;
+      transition: opacity 0.3s;
+    }
+    .nav-links a:hover { opacity: 1; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 7rem 4rem 5rem;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.3s forwards;
+    }
+    .hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(4rem, 8vw, 8rem);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      opacity: 0;
+      animation: fadeUp 1s 0.5s forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--rust);
+    }
+    .hero-sub {
+      margin-top: 2.5rem;
+      font-size: 1.15rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--ink);
+      opacity: 0.6;
+      max-width: 380px;
+      opacity: 0;
+      animation: fadeUp 1s 0.75s forwards;
+    }
+    .hero-scroll {
+      margin-top: 4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      opacity: 0;
+      animation: fadeUp 1s 1s forwards;
+    }
+    .hero-scroll::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 1px;
+      background: var(--ink);
+    }
+    .hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-img-wrap {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.2s forwards;
+    }
+    .hero-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: sepia(15%) contrast(1.05);
+      transition: transform 8s ease;
+    }
+    .hero-img-wrap:hover img { transform: scale(1.03); }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--paper) 0%, transparent 30%);
+      z-index: 1;
+    }
+    .hero-number {
+      position: absolute;
+      bottom: 2rem;
+      right: 2rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 8rem;
+      font-weight: 900;
+      line-height: 1;
+      color: var(--ink);
+      opacity: 0.04;
+      z-index: 2;
+      pointer-events: none;
     }
 
-    .hero p{
-      margin-top:15px;
-      font-size:1.1rem;
-      color:#cfcfcf;
-      font-weight:300;
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.5rem;
+      margin-bottom: 4rem;
+    }
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--ink);
+      opacity: 0.12;
+    }
+    .section-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--ink);
+      opacity: 0.3;
     }
 
-    .about{
-      max-width:900px;
-      margin:auto;
-      padding:100px 25px;
-      text-align:center;
+    /* ── ABOUT ── */
+    .about {
+      padding: 8rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 6rem;
+      align-items: center;
+      background: var(--ink);
+      color: var(--paper);
+      position: relative;
+      overflow: hidden;
+    }
+    .about::before {
+      content: 'A·O';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: 'Playfair Display', serif;
+      font-size: 22rem;
+      font-weight: 900;
+      color: var(--paper);
+      opacity: 0.02;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .about-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+    }
+    .about h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.01em;
+      color: var(--paper);
+    }
+    .about h2 em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .about-body p {
+      font-size: 1.2rem;
+      line-height: 1.85;
+      font-weight: 300;
+      color: var(--mist);
+      margin-bottom: 1.5rem;
+    }
+    .about-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mist);
+      opacity: 0.6;
+      margin-top: 0.4rem;
     }
 
-    .about h2,
-    .gallery-title,
-    .contact h2{
-      font-size:2.5rem;
-      margin-bottom:20px;
+    /* ── GALLERY ── */
+    .gallery {
+      padding: 8rem 4rem;
+      background: var(--paper);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 1.5rem;
+      margin-top: 1rem;
     }
 
-    .about p{
-      line-height:1.8;
-      color:#b5b5b5;
-      font-size:1.05rem;
+    /* Editorial mosaic layout */
+    .photo-item {
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+    }
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: sepia(8%) contrast(1.08) saturate(0.9);
+      transition: filter 0.6s ease, transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .photo-item:hover img {
+      filter: sepia(0%) contrast(1.05) saturate(1.1);
+      transform: scale(1.04);
+    }
+    .photo-caption {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 3rem 1.5rem 1.5rem;
+      background: linear-gradient(transparent, rgba(17,16,8,0.75));
+      color: var(--paper);
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    .photo-item:hover .photo-caption { opacity: 1; transform: translateY(0); }
+    .caption-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      margin-bottom: 0.35rem;
+    }
+    .caption-text {
+      font-size: 0.95rem;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.4;
     }
 
-    .gallery{
-      padding:0 25px 100px;
-      max-width:1400px;
-      margin:auto;
+    /* Grid item placements — editorial */
+    .p1  { grid-column: 1 / 6;  grid-row: 1; height: 520px; }
+    .p2  { grid-column: 6 / 10; grid-row: 1; height: 520px; }
+    .p3  { grid-column: 10 / 13; grid-row: 1; height: 520px; }
+    .p4  { grid-column: 1 / 5;  grid-row: 2; height: 380px; }
+    .p5  { grid-column: 5 / 9;  grid-row: 2; height: 380px; }
+    .p6  { grid-column: 9 / 13; grid-row: 2; height: 380px; }
+    .p7  { grid-column: 1 / 4;  grid-row: 3; height: 450px; }
+    .p8  { grid-column: 4 / 9;  grid-row: 3; height: 450px; }
+    .p9  { grid-column: 9 / 13; grid-row: 3; height: 450px; }
+    .p10 { grid-column: 1 / 13; grid-row: 4; height: 400px; }
+
+    /* ── QUOTE ── */
+    .quote-section {
+      background: var(--off);
+      padding: 8rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .quote-mark {
+      font-family: 'Playfair Display', serif;
+      font-size: 18rem;
+      line-height: 0.6;
+      color: var(--ink);
+      opacity: 0.05;
+      pointer-events: none;
+      user-select: none;
+    }
+    .quote-text {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.4;
+      max-width: 860px;
+      margin: 0 auto;
+      color: var(--ink);
+      position: relative;
+      z-index: 1;
+    }
+    .quote-author {
+      margin-top: 2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
     }
 
-    .gallery-title{
-      text-align:center;
-      margin-bottom:50px;
+    /* ── CONTACT ── */
+    .contact {
+      background: var(--ink);
+      padding: 8rem 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      align-items: end;
+    }
+    .contact h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 6rem);
+      font-weight: 900;
+      line-height: 0.9;
+      color: var(--paper);
+      letter-spacing: -0.02em;
+    }
+    .contact h2 em {
+      display: block;
+      font-style: italic;
+      color: var(--gold);
+    }
+    .contact-links { display: flex; flex-direction: column; gap: 1.5rem; }
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .contact-item:last-child { border-bottom: none; }
+    .contact-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      min-width: 80px;
+    }
+    .contact-value {
+      font-size: 1rem;
+      color: var(--mist);
+      font-weight: 300;
     }
 
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:20px;
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 2rem 4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--mist);
+      opacity: 0.4;
+    }
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15em;
+      color: var(--mist);
+      opacity: 0.25;
     }
 
-    .grid img{
-      width:100%;
-      height:420px;
-      object-fit:cover;
-      border-radius:18px;
-      transition:.4s ease;
-      filter:grayscale(15%);
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
     }
 
-    .grid img:hover{
-      transform:scale(1.02);
-      filter:none;
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
     }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    .contact{
-      padding:100px 25px;
-      text-align:center;
-      border-top:1px solid rgba(255,255,255,.08);
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(17,16,8,0.96);
+      z-index: 800;
+      align-items: center;
+      justify-content: center;
+      cursor: none;
     }
-
-    .contact p{
-      color:#b8b8b8;
-      margin-bottom:20px;
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      border: 1px solid rgba(255,255,255,0.06);
     }
-
-    .socials{
-      display:flex;
-      justify-content:center;
-      gap:20px;
-      flex-wrap:wrap;
+    .lightbox-close {
+      position: absolute;
+      top: 2rem; right: 2.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--mist);
+      opacity: 0.5;
+      cursor: none;
+      transition: opacity 0.2s;
     }
+    .lightbox-close:hover { opacity: 1; }
 
-    .socials a{
-      text-decoration:none;
-      color:white;
-      padding:12px 22px;
-      border:1px solid rgba(255,255,255,.15);
-      border-radius:999px;
-      transition:.3s;
-    }
-
-    .socials a:hover{
-      background:white;
-      color:black;
-    }
-
-    footer{
-      padding:30px;
-      text-align:center;
-      color:#777;
-      font-size:.9rem;
-    }
-
-    @media(max-width:768px){
-      .hero h1{
-        font-size:3rem;
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1.5rem 2rem; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { height: 55vw; }
+      .hero-left { padding: 8rem 2rem 4rem; }
+      .about { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+      .gallery { padding: 5rem 1.5rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+      .p1,.p2,.p3,.p4,.p5,.p6,.p7,.p8,.p9,.p10 {
+        grid-column: auto; grid-row: auto; height: 52vw;
       }
-
-      .grid img{
-        height:320px;
-      }
+      .p10 { grid-column: 1 / -1; height: 55vw; }
+      .contact { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
+      footer { padding: 1.5rem 2rem; flex-direction: column; gap: 0.75rem; text-align: center; }
+      .about-stats { gap: 2rem; }
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="hero">
-      <h1>SOSU</h1>
-      <p>Fotografía • Perspectivas • Detalles</p>
+  <div class="cursor" id="cursor"></div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">E · A · O</div>
+    <ul class="nav-links">
+      <li><a href="#sobre-mi">Sobre mí</a></li>
+      <li><a href="#galeria">Galería</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <p class="hero-eyebrow">Portafolio Fotográfico — 2026</p>
+      <h1 class="hero-title">
+        Habitando<br>
+        los<br>
+        <em>Detalles</em>
+      </h1>
+      <p class="hero-sub">
+        La belleza no está en los lugares extraordinarios,<br>
+        sino en la mirada que los encuentra.
+      </p>
+      <div class="hero-scroll">Desplázate para explorar</div>
     </div>
-  </header>
-
-  <section class="about">
-    <h2>Sobre mí</h2>
-    <p>
-      Me interesa capturar momentos, atmósferas y pequeños detalles que normalmente pasan desapercibidos.
-      Mi enfoque mezcla estética, emoción y una forma más introspectiva de observar el entorno.
-    </p>
-  </section>
-
-  <section class="gallery">
-    <h2 class="gallery-title">Galería</h2>
-
-    <div class="grid">
-      <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?q=80&w=1200&auto=format&fit=crop">
-
-      <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=1200&auto=format&fit=crop">
-
-      <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop">
-
-      <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1200&auto=format&fit=crop">
-
-      <img src="https://images.unsplash.com/photo-1527631746610-bca00a040d60?q=80&w=1200&auto=format&fit=crop">
-
-      <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=1200&auto=format&fit=crop">
-    </div>
-  </section>
-
-  <section class="contact">
-    <h2>Contacto</h2>
-    <p>Puedes encontrarme o seguir mi trabajo aquí.</p>
-
-    <div class="socials">
-      <a href="#">Instagram</a>
-      <a href="#">Behance</a>
-      <a href="#">GitHub</a>
+    <div class="hero-right">
+      <div class="hero-img-wrap">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_39_PM.jpeg" alt="Portada" />
+        <div class="hero-overlay"></div>
+      </div>
+      <div class="hero-number">01</div>
     </div>
   </section>
 
+  <!-- ABOUT -->
+  <section id="sobre-mi" class="about">
+    <div class="about-left reveal">
+      <p class="about-tag">Sobre el autor</p>
+      <h2>El ojo<br>que <em>pausa</em><br>el mundo</h2>
+    </div>
+    <div class="about-body reveal" style="transition-delay: 0.15s">
+  <p>
+    Soy Benjamin Piratova. Como estudiante de Ingeniería de Sistemas, encuentro en la lógica y la resolución de problemas una parte esencial de quién soy. Pero más allá de lo académico, también me atraen las historias profundas, los pequeños detalles y las formas de expresión que transmiten algo real.
+  </p>
+  <p>
+    Suelo ser alguien analítico e introspectivo, aunque detrás de esa imagen seria también existe una versión espontánea, cercana y llena de curiosidad. Creo en el equilibrio entre la razón y lo humano, y en encontrar sentido tanto en lo que construimos como en lo que sentimos.
+  </p>
+      <div class="about-stats">
+        <div>
+          <div class="stat-num">10</div>
+          <div class="stat-label">Imágenes</div>
+        </div>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Detalles</div>
+        </div>
+        <div>
+          <div class="stat-num">BOG</div>
+          <div class="stat-label">Origen</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section id="galeria" class="gallery">
+    <div class="section-header reveal">
+      <span class="section-label">Trabajos recientes</span>
+      <div class="section-line"></div>
+      <span class="section-count">10 piezas</span>
+    </div>
+
+    <div class="gallery-grid">
+
+      <div class="photo-item p1 reveal" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_39_PM.jpeg" alt="Árbol solitario" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 001</div>
+          <div class="caption-text">El árbol que sostiene el cielo</div>
+        </div>
+      </div>
+
+      <div class="photo-item p2 reveal" style="transition-delay:0.1s" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_39_PM__1_.jpeg" alt="Catedral de Bogotá" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 002</div>
+          <div class="caption-text">Plaza Bolívar al amanecer</div>
+        </div>
+      </div>
+
+      <div class="photo-item p3 reveal" style="transition-delay:0.2s" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_40_PM.jpeg" alt="Arte urbano contenedores" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 003</div>
+          <div class="caption-text">Geometría inesperada en el espacio público</div>
+        </div>
+      </div>
+
+      <div class="photo-item p4 reveal" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_41_PM.jpeg" alt="Skyline Bogotá" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 004</div>
+          <div class="caption-text">La ciudad respirando desde las alturas</div>
+        </div>
+      </div>
+
+      <div class="photo-item p5 reveal" style="transition-delay:0.1s" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_41_PM__1_.jpeg" alt="Pepsi y cubo" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 005</div>
+          <div class="caption-text">Objetos en diálogo sobre el silencio</div>
+        </div>
+      </div>
+
+      <div class="photo-item p6 reveal" style="transition-delay:0.2s" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_41_PM__2_.jpeg" alt="Universidad Distrital" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 006</div>
+          <div class="caption-text">La universidad que nunca duerme</div>
+        </div>
+      </div>
+
+      <div class="photo-item p7 reveal" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_41_PM__3_.jpeg" alt="Grafiti conejo" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 007</div>
+          <div class="caption-text">¿Aló? El muro también habla</div>
+        </div>
+      </div>
+
+      <div class="photo-item p8 reveal" style="transition-delay:0.1s" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_9_59_42_PM.jpeg" alt="Mural perros" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 008</div>
+          <div class="caption-text">Memorias pintadas en la pared universitaria</div>
+        </div>
+      </div>
+
+      <div class="photo-item p9 reveal" style="transition-delay:0.2s" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_6_53_59_PM.jpeg" alt="Quebrada rocas" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 009</div>
+          <div class="caption-text">Agua que esculpe el tiempo en piedra</div>
+        </div>
+      </div>
+
+      <div class="photo-item p10 reveal" onclick="openLightbox(this)">
+        <img src="WhatsApp_Image_2026-05-27_at_6_54_00_PM.jpeg" alt="Sendero eucaliptos" loading="lazy" />
+        <div class="photo-caption">
+          <div class="caption-num">— 010</div>
+          <div class="caption-text">El camino entre eucaliptos: una catedral verde</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contacto" class="contact">
+    <div class="reveal">
+      <h2>Hablemos<br><em>juntos</em></h2>
+    </div>
+    <div class="contact-links reveal" style="transition-delay:0.15s">
+      <div class="contact-item">
+        <span class="contact-label">Ciudad</span>
+        <span class="contact-value">Bogotá, Colombia</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Área</span>
+        <span class="contact-value">Fotografía documental & urbana</span>
+      </div>
+      <div class="contact-item">
+        <span class="contact-label">Autor</span>
+        <span class="contact-value">Alejandro Orjuela — Ing. Sistemas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
   <footer>
-    © 2026 Sosu — Portfolio fotográfico.
+    <div class="footer-logo">E · A · O — Portafolio Fotográfico</div>
+    <div class="footer-copy">© 2026 Benjamin Piratova. Todos los derechos reservados.</div>
   </footer>
 
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <div class="lightbox-close">Cerrar — ESC</div>
+    <img id="lightbox-img" src="" alt="" />
+  </div>
+
+  <script>
+    // Cursor
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top  = e.clientY + 'px';
+    });
+    document.querySelectorAll('a, .photo-item, .lightbox-close').forEach(el => {
+      el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+      el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    });
+
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Lightbox
+    function openLightbox(item) {
+      const src = item.querySelector('img').src;
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+  </script>
 </body>
 </html>
